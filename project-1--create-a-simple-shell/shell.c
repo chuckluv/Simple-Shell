@@ -13,10 +13,11 @@
 char prompt[] = "> ";
 char delimiters[] = " \t\r\n";
 extern char **environ;
-
-
+void handler(int signum);
+pid_t pid;
 
 int main() {
+    signal(SIGINT,handler);
     // Stores the string typed into the command line.
     char command_line[MAX_COMMAND_LINE_LEN];
     char cmd_bak[MAX_COMMAND_LINE_LEN];
@@ -89,16 +90,18 @@ int main() {
    //   char cd[]="cd", pwd[]="pwd", echo[]="echo",exit[]="exit",env[]="env",setenv[]="setenv";
         
           if (strcmp(arguments[0],"cd")==0){
-            printf("CD worked\n");
+            chdir(arguments[1]);
           }
          else if (strcmp(arguments[0],"pwd")==0){
-            printf("pwd worked\n");
+           getcwd(cwd, sizeof(cwd));
+            printf("%s\n", cwd);
+            fflush(stdout);
           }
          else if (strcmp(arguments[0],"echo")==0){
             printf("echo worked\n");
           }
          else if (strcmp(arguments[0],"exit")==0){
-            printf("exit worked\n");
+            exit(0);
           }
          else if (strcmp(arguments[0],"env")==0){
             printf("env worked\n");
@@ -152,4 +155,9 @@ int main() {
     }
     // This should never be reached.
     return -1;
+}
+void handler(int signum)
+{ //signal handler
+  printf("Caught signal %d\n",signum);
+  kill(pid,SIGKILL);
 }
