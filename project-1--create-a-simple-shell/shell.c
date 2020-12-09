@@ -83,30 +83,46 @@ int main() {
         while(arguments[i] != NULL){
           arguments[++i] = strtok(NULL, delimiters);
         }
+      arguments[i] = NULL;
       int j;
       
-      char cd[]="cd", pwd[]="pwd", echo[]="echo",exit[]="exit",env[]="env",setenv[]="setenv";
-        for(j = 0; j<i; j++){
-          if (strcmp(arguments[j],cd)==0){
+   //   char cd[]="cd", pwd[]="pwd", echo[]="echo",exit[]="exit",env[]="env",setenv[]="setenv";
+        
+          if (strcmp(arguments[0],"cd")==0){
             printf("CD worked\n");
           }
-          if (strcmp(arguments[j],pwd)==0){
+         else if (strcmp(arguments[0],"pwd")==0){
             printf("pwd worked\n");
           }
-          if (strcmp(arguments[j],echo)==0){
+         else if (strcmp(arguments[0],"echo")==0){
             printf("echo worked\n");
           }
-          if (strcmp(arguments[j],exit)==0){
+         else if (strcmp(arguments[0],"exit")==0){
             printf("exit worked\n");
           }
-          if (strcmp(arguments[j],env)==0){
+         else if (strcmp(arguments[0],"env")==0){
             printf("env worked\n");
           }
-          if (strcmp(arguments[j],setenv)==0){
+         else if (strcmp(arguments[0],"setenv")==0){
             printf("setenv worked\n");
           }
-        }
-      
+         else{
+            pid_t pid = fork();
+            if(pid < 0){
+              perror("fork failed");
+              exit(0);
+            }
+            if(pid ==0){
+             execvp(arguments[0],arguments);
+             //printf("here");
+            }
+            else{
+              wait(NULL);
+              
+            }
+          }
+        
+        
         // 2. Implement Built-In Commands
         
     
