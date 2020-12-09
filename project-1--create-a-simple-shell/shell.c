@@ -20,12 +20,12 @@ int main() {
     // Stores the string typed into the command line.
     char command_line[MAX_COMMAND_LINE_LEN];
     char cmd_bak[MAX_COMMAND_LINE_LEN];
-  
+    bool isBackground = false;
     // Stores the tokenized command line input.
     char *arguments[MAX_COMMAND_LINE_ARGS];
-  char cwd[100];
+    char cwd[100];
     while (true) {
-      
+        isBackground = false;
         do{ 
             // Print the shell prompt.
             getcwd(cwd, sizeof(cwd));
@@ -107,6 +107,10 @@ int main() {
             printf("setenv worked\n");
           }
          else{
+            if (strcmp(arguments[i-1],"&")==0){
+              arguments[i-1]= NULL;
+                isBackground = true;
+              }
             pid_t pid = fork();
             if(pid < 0){
               perror("fork failed");
@@ -117,8 +121,9 @@ int main() {
              //printf("here");
             }
             else{
+             if(isBackground != true){
               wait(NULL);
-              
+             }
             }
           }
         
