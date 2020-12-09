@@ -23,12 +23,13 @@ int main() {
   
     // Stores the tokenized command line input.
     char *arguments[MAX_COMMAND_LINE_ARGS];
-  
+  char cwd[100];
     while (true) {
       
         do{ 
             // Print the shell prompt.
-            printf("%s", prompt);
+            getcwd(cwd, sizeof(cwd));
+            printf("%s%s", cwd,prompt);
             fflush(stdout);
 
             // Read input from stdin and store it in command_line. If there's an
@@ -50,6 +51,7 @@ int main() {
             fflush(stderr);
             return 0;
         }
+      /*
       int i;
       int pos = 0;
       char arg[MAX_COMMAND_LINE_ARGS];
@@ -65,7 +67,9 @@ int main() {
       int k=0;
       while(arguments[k]){
         printf("%s - ", arguments[k]);
+        
       }
+      */
         // TODO:
         // 
         
@@ -73,10 +77,38 @@ int main() {
 			  
 			
         // 1. Tokenize the command line input (split it on whitespace)
-
+        arguments[0]=strtok(command_line, delimiters);
+        
+        int i =0;
+        while(arguments[i] != NULL){
+          arguments[++i] = strtok(NULL, delimiters);
+        }
+      int j;
+      
+      char cd[]="cd", pwd[]="pwd", echo[]="echo",exit[]="exit",env[]="env",setenv[]="setenv";
+        for(j = 0; j<i; j++){
+          if (strcmp(arguments[j],cd)==0){
+            printf("CD worked\n");
+          }
+          if (strcmp(arguments[j],pwd)==0){
+            printf("pwd worked\n");
+          }
+          if (strcmp(arguments[j],echo)==0){
+            printf("echo worked\n");
+          }
+          if (strcmp(arguments[j],exit)==0){
+            printf("exit worked\n");
+          }
+          if (strcmp(arguments[j],env)==0){
+            printf("env worked\n");
+          }
+          if (strcmp(arguments[j],setenv)==0){
+            printf("setenv worked\n");
+          }
+        }
       
         // 2. Implement Built-In Commands
-      
+        
     
         // 3. Create a child process which will execute the command line input
 
